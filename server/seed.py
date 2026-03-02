@@ -1,6 +1,6 @@
-from app import create_app, db
-from app.models.user import User
-from app.models.restaurant import Restaurant, MenuItem
+from server.app import create_app, db
+from server.app.models.user import User
+from server.app.models.restaurant import Restaurant, MenuItem
 
 def seed_data():
     app = create_app()

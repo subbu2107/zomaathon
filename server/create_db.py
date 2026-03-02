@@ -1,4 +1,4 @@
-from app import create_app, db
+from server.app import create_app, db
 import os
 
 app = create_app()
