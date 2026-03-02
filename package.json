@@ -1,0 +1,12 @@
+{
+    "name": "zomathon",
+    "private": true,
+    "workspaces": [
+        "client",
+        "server"
+    ],
+    "scripts": {
+        "build": "npm run build --workspace=client",
+        "dev": "npm run dev --workspace=client"
+    }
+}

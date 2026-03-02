@@ -1,0 +1,17 @@
+flask
+flask-sqlalchemy
+flask-cors
+flask-jwt-extended
+flask-migrate
+flask-bcrypt
+pymysql
+python-dotenv
+marshmallow
+marshmallow-sqlalchemy
+waitress
+stripe
+googlemaps
+flask-socketio
+eventlet
+psycopg2-binary
+gunicorn
