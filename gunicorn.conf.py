@@ -1,4 +1,7 @@
 # Gunicorn configuration for Zomathon
+import eventlet
+eventlet.monkey_patch()
+
 import multiprocessing
 
 # MUST use eventlet for Socket.IO

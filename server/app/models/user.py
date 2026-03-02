@@ -8,7 +8,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     phone = db.Column(db.String(20))
-    role = db.Column(db.Enum('user', 'owner', 'admin'), default='user')
+    role = db.Column(db.Enum('user', 'owner', 'admin', name='user_roles'), default='user')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     addresses = db.relationship('Address', backref='user', lazy=True)
