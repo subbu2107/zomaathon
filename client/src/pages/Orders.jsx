@@ -9,7 +9,13 @@ import { toast } from 'react-toastify';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000');
+const getSocketURL = () => {
+    let url = import.meta.env.VITE_SOCKET_URL;
+    if (!url) return 'http://localhost:5000';
+    return url.startsWith('http') ? url : `https://${url}`;
+};
+
+const socket = io(getSocketURL());
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);

@@ -6,7 +6,13 @@ import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 
-const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000');
+const getSocketURL = () => {
+    let url = import.meta.env.VITE_SOCKET_URL;
+    if (!url) return 'http://localhost:5000';
+    return url.startsWith('http') ? url : `https://${url}`;
+};
+
+const socket = io(getSocketURL());
 
 const Dashboard = () => {
     const { user } = useAuth();
@@ -227,7 +233,7 @@ const Dashboard = () => {
                                             <div className="flex items-center space-x-3 mb-1">
                                                 <span className="font-mono font-black text-gray-300">#{order.id}</span>
                                                 <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${order.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' :
-                                                        order.status === 'Delivered' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                                                    order.status === 'Delivered' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
                                                     }`}>
                                                     {order.status}
                                                 </span>
