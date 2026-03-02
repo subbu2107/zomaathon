@@ -6,13 +6,12 @@ import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 
-const getSocketURL = () => {
-    let url = import.meta.env.VITE_SOCKET_URL;
-    if (!url) return 'http://localhost:5000';
-    return url.startsWith('http') ? url : `https://${url}`;
-};
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-const socket = io(getSocketURL());
+const socket = io(API_URL, {
+    transports: ["websocket"],
+    withCredentials: true
+});
 
 const Dashboard = () => {
     const { user } = useAuth();

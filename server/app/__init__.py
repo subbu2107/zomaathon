@@ -35,7 +35,9 @@ def create_app():
     jwt.init_app(app)
     migrate.init_app(app, db)
     socketio.init_app(app)
-    CORS(app)
+    
+    # Enable CORS for the frontend URL
+    CORS(app, origins=["https://zomathon-frontend.onrender.com", "http://localhost:3000"])
 
     @app.route('/')
     def health_check():
