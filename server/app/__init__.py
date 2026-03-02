@@ -37,6 +37,10 @@ def create_app():
     socketio.init_app(app)
     CORS(app)
 
+    @app.route('/')
+    def health_check():
+        return {"status": "healthy", "service": "Zomathon Backend"}, 200
+
     # ✅ FIXED IMPORTS (IMPORTANT)
     from server.app.routes.auth import auth_bp
     from server.app.routes.restaurant import restaurant_bp
