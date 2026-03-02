@@ -10,11 +10,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Configure Allowed Origins for Production and Development
+allowed_origins = [
+    "https://zomaathon-1.onrender.com",
+    "https://zomathon-frontend.onrender.com",
+    "http://localhost:5173",
+    "http://localhost:3000"
+]
+
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 jwt = JWTManager()
 migrate = Migrate()
-socketio = SocketIO(cors_allowed_origins="*")
+socketio = SocketIO(cors_allowed_origins=allowed_origins, async_mode="eventlet")
 
 
 def create_app():
@@ -36,8 +44,8 @@ def create_app():
     migrate.init_app(app, db)
     socketio.init_app(app)
     
-    # Enable CORS for the frontend URL
-    CORS(app, origins=["https://zomathon-frontend.onrender.com", "http://localhost:3000"])
+    # Configure CORS with credentials support
+    CORS(app, resources={r"/*": {"origins": allowed_origins}}, supports_credentials=True)
 
     @app.route('/')
     def health_check():
