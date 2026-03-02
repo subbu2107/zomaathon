@@ -1,0 +1,21 @@
+﻿.\venv\Scripts\python : Traceback (most recent 
+call last):
+At line:1 char:1
++ .\venv\Scripts\python run.py 2> error.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Trace 
+   back (most recent call last)::String) [], Remo  
+  teException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "D:\Projects\Zomathon\server\run.py", line 
+9, in <module>
+    socketio.run(flask_app, debug=True, port=port)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Zomathon\server\venv\Lib\site-p
+ackages\flask_socketio\__init__.py", line 620, in 
+run
+    debug = kwargs.pop('debug', app.debug)
+                                ^^^^^^^^^
+AttributeError: module 'app' has no attribute 
+'debug'
