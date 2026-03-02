@@ -1,5 +1,5 @@
 from flask_socketio import join_room, leave_room
-from app import socketio
+from server.app import socketio
 
 @socketio.on('join')
 def on_join(data):

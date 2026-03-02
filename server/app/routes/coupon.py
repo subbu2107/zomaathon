@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from app import db
-from app.models.interactions import Coupon
+from server.app import db
+from server.app.models.interactions import Coupon
 from datetime import datetime
 
 coupon_bp = Blueprint('coupon', __name__)

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
-from app import db
-from app.models.restaurant import MenuItem
-from app.middleware.auth import roles_required
+from server.app import db
+from server.app.models.restaurant import MenuItem
+from server.app.middleware.auth import roles_required
 
 menu_bp = Blueprint('menu', __name__)
 

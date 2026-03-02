@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify
-from app import db
-from app.models.user import Address
-from app.models.interactions import Favorite
-from app.models.restaurant import Restaurant
+from server.app import db
+from server.app.models.user import Address
+from server.app.models.interactions import Favorite
+from server.app.models.restaurant import Restaurant
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 user_bp = Blueprint('user', __name__)

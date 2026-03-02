@@ -1,4 +1,4 @@
-from app import db
+from server.app import db
 from datetime import datetime
 
 class Review(db.Model):

@@ -1,8 +1,8 @@
 import stripe
 import os
 from flask import Blueprint, request, jsonify
-from app import db
-from app.models.order import Order, Payment
+from server.app import db
+from server.app.models.order import Order, Payment
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 payment_bp = Blueprint('payment', __name__)

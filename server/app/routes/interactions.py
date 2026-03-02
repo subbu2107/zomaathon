@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
-from app import db
-from app.models.interactions import Review
-from app.models.restaurant import Restaurant
+from server.app import db
+from server.app.models.interactions import Review
+from server.app.models.restaurant import Restaurant
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 interaction_bp = Blueprint('interaction', __name__)

@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
-from app import db, socketio
-from app.models.order import Order, OrderItem
-from app.models.restaurant import MenuItem
+from server.app import db, socketio
+from server.app.models.order import Order, OrderItem
+from server.app.models.restaurant import MenuItem
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.middleware.auth import roles_required
+from server.app.middleware.auth import roles_required
 
 order_bp = Blueprint('order', __name__)
 
