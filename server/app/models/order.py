@@ -17,7 +17,7 @@ class Order(db.Model):
     tracking = db.relationship('DeliveryTracking', backref='order', uselist=False, lazy=True)
 
     def to_dict(self):
-        from app.models.restaurant import Restaurant # Local import to avoid circular dependency if needed, but Order usually knows Restaurant
+        from server.app.models.restaurant import Restaurant # Local import to avoid circular dependency if needed, but Order usually knows Restaurant
         restaurant = Restaurant.query.get(self.restaurant_id)
         return {
             "id": self.id,

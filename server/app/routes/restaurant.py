@@ -95,7 +95,7 @@ def get_recommendations():
                 for t in types:
                     preferred_cuisines[t] = preferred_cuisines.get(t, 0) + 1
         
-        from app.models.interactions import Favorite
+        from server.app.models.interactions import Favorite
         favs = Favorite.query.filter_by(user_id=user_id).all()
         favorite_ids = {f.restaurant_id for f in favs}
 

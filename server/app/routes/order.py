@@ -63,7 +63,7 @@ def update_order_status(id):
 @order_bp.route('/restaurant/<int:restaurant_id>', methods=['GET'])
 @roles_required('owner', 'admin')
 def restaurant_orders(restaurant_id):
-    from app.models.restaurant import Restaurant
+    from server.app.models.restaurant import Restaurant
     user_id = get_jwt_identity()
     restaurant = Restaurant.query.get_or_404(restaurant_id)
     
