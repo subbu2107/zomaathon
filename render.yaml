@@ -3,9 +3,9 @@ services:
   - type: web
     name: zomathon-backend
     env: python
-    rootDir: server
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -k eventlet -w 1 run:app
+    rootDir: .
+    buildCommand: pip install -r server/requirements.txt
+    startCommand: gunicorn -k eventlet -w 1 server.run:app
     envVars:
       - key: DATABASE_URL
         fromDatabase:
