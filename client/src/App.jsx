@@ -15,6 +15,7 @@ import Profile from './pages/Profile';
 import Dashboard from './pages/Dashboard';
 import CreateRestaurant from './pages/CreateRestaurant';
 import Admin from './pages/Admin';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/dashboard/create-restaurant" element={<CreateRestaurant />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
             <ToastContainer position="bottom-right" />
