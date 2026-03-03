@@ -67,7 +67,6 @@ const Navbar = () => {
                                 </div>
                                 <span className="hidden md:block">{user.full_name?.split(' ')[0]}</span>
                             </button>
-                            {/* Wrap with pt-2 to bridge the hover gap */}
                             <div className="absolute right-0 top-full pt-2 w-48 hidden group-hover:block z-50">
                                 <div className="bg-bg rounded-lg shadow-xl border border-muted/10 transition-all overflow-hidden">
                                     <Link to="/profile" className="block px-4 py-2 hover:bg-muted/5 text-dark">My Profile</Link>

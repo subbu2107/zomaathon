@@ -32,7 +32,6 @@ const DeliveryTracker = ({ orderId, restaurantLocation, deliveryLocation }) => {
             });
             setMap(newMap);
 
-            // Restaurant Marker
             new google.maps.Marker({
                 position: restaurantLocation,
                 map: newMap,
@@ -40,7 +39,6 @@ const DeliveryTracker = ({ orderId, restaurantLocation, deliveryLocation }) => {
                 title: 'Restaurant'
             });
 
-            // Delivery Location Marker
             new google.maps.Marker({
                 position: deliveryLocation,
                 map: newMap,
@@ -48,7 +46,6 @@ const DeliveryTracker = ({ orderId, restaurantLocation, deliveryLocation }) => {
                 title: 'Your Location'
             });
 
-            // Delivery Boy Marker (Mocking movement)
             const bikeMarker = new google.maps.Marker({
                 position: restaurantLocation,
                 map: newMap,
@@ -64,7 +61,6 @@ const DeliveryTracker = ({ orderId, restaurantLocation, deliveryLocation }) => {
     useEffect(() => {
         if (!map || !marker || !restaurantLocation?.lat || !deliveryLocation?.lat) return;
 
-        // Mock movement from restaurant to delivery location
         let fraction = 0;
         const interval = setInterval(() => {
             if (fraction >= 1) {

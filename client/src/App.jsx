@@ -13,8 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Profile from './pages/Profile';
 import Dashboard from './pages/Dashboard';
-import CreateRestaurant from './pages/CreateRestaurant';
 import Admin from './pages/Admin';
+import CreateRestaurant from './pages/CreateRestaurant';
 import NotFound from './pages/NotFound';
 
 function App() {

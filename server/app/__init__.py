@@ -51,7 +51,8 @@ def create_app():
     def health_check():
         return {"status": "healthy", "service": "Zomathon Backend"}, 200
 
-    # ✅ FIXED IMPORTS (IMPORTANT)
+    # ✅ Import models BEFORE creating tables
+    from server.app.models import user, restaurant, interaction, order
     from server.app.routes.auth import auth_bp
     from server.app.routes.restaurant import restaurant_bp
     from server.app.routes.menu import menu_bp

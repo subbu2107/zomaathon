@@ -26,7 +26,6 @@ const Admin = () => {
                 API.get('/restaurants/')
             ]);
 
-            // Mocking user list since we don't have a dedicated all-users endpoint yet
             setUsers([{ id: 1, full_name: "Admin User", email: "admin@zomathon.com", role: "admin" }]);
             setRestaurants(resRest.data);
 
@@ -44,7 +43,6 @@ const Admin = () => {
 
     const handleApprove = async (id) => {
         try {
-            // Ideally a dedicated put endpoint for approval
             await API.post(`/restaurants/`, { id, is_approved: true });
             toast.success("Restaurant approved!");
             fetchAdminData();
@@ -69,7 +67,6 @@ const Admin = () => {
                 </div>
             </div>
 
-            {/* Admin Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
                 <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex items-center space-x-4">
                     <div className="bg-blue-50 text-blue-500 p-3 rounded-2xl"><Users size={24} /></div>
@@ -101,7 +98,6 @@ const Admin = () => {
                 </div>
             </div>
 
-            {/* Main Admin Section */}
             <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
                 <div className="flex flex-col md:flex-row items-center border-b border-slate-100">
                     <button

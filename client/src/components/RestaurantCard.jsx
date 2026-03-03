@@ -22,7 +22,7 @@ const RestaurantCard = ({ restaurant }) => {
                         <Star size={10} fill="currentColor" />
                     </div>
                 </div>
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center justify-between text-sm text-muted">
                     <p className="truncate">{restaurant.cuisine_type}</p>
                     <p>₹{restaurant.avg_price} for two</p>
                 </div>

@@ -40,7 +40,6 @@ const Reviews = ({ restaurantId }) => {
                 <span>Reviews & Ratings</span>
             </h2>
 
-            {/* Post Review */}
             <form onSubmit={handleSubmit} className="card p-6 mb-10 bg-white border border-slate-100 shadow-sm">
                 <p className="text-sm font-bold text-slate-700 mb-4">How was your experience?</p>
                 <div className="flex items-center space-x-2 mb-4">
@@ -68,7 +67,6 @@ const Reviews = ({ restaurantId }) => {
                 </button>
             </form>
 
-            {/* Review List */}
             <div className="space-y-6">
                 {reviews.map((r) => (
                     <div key={r.id} className="p-6 bg-white rounded-2xl border border-slate-50 shadow-sm">

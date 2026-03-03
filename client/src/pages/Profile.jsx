@@ -63,7 +63,6 @@ const Profile = () => {
     return (
         <div className="px-4 md:px-20 py-10 bg-bg min-h-screen text-dark transition-colors duration-300">
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8">
-                {/* Sidebar */}
                 <div className="w-full md:w-64 space-y-4">
                     <div className="bg-bg p-8 rounded-3xl shadow-xl border border-muted/10 mb-6 transition-all">
                         <div className="w-20 h-20 bg-brand/10 text-brand rounded-3xl flex items-center justify-center mx-auto mb-6 rotate-3 hover:rotate-0 transition-transform duration-500">
@@ -92,7 +91,6 @@ const Profile = () => {
                     </div>
                 </div>
 
-                {/* Main Content */}
                 <div className="flex-1">
                     {activeTab === 'addresses' && (
                         <div className="space-y-8">

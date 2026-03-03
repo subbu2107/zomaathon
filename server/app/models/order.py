@@ -7,9 +7,9 @@ class Order(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
     total_amount = db.Column(db.Numeric(10, 2), nullable=False)
-    status = db.Column(db.Enum('Pending', 'Preparing', 'Out for Delivery', 'Delivered', 'Cancelled', name='order_status'), default='Pending')
-    payment_status = db.Column(db.Enum('Pending', 'Completed', 'Failed', name='payment_status'), default='Pending')
-    payment_method = db.Column(db.Enum('COD', 'Online', name='payment_method'), nullable=False)
+    status = db.Column(db.Enum('Pending', 'Preparing', 'Out for Delivery', 'Delivered', 'Cancelled'), default='Pending')
+    payment_status = db.Column(db.Enum('Pending', 'Completed', 'Failed'), default='Pending')
+    payment_method = db.Column(db.Enum('COD', 'Online'), nullable=False)
     address_id = db.Column(db.Integer, db.ForeignKey('addresses.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -59,7 +59,7 @@ class Payment(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
     transaction_id = db.Column(db.String(100), unique=True)
     amount = db.Column(db.Numeric(10, 2), nullable=False)
-    status = db.Column(db.Enum('Pending', 'Success', 'Failed', name='transaction_status'), default='Pending')
+    status = db.Column(db.Enum('Pending', 'Success', 'Failed'), default='Pending')
     method = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 

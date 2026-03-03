@@ -20,12 +20,10 @@ const RestaurantDetails = () => {
                 const res = await API.get(`/restaurants/${id}`);
                 setRestaurant(res.data);
 
-                // Check if restaurant is in user's favorites
                 try {
                     const favsRes = await API.get('/users/favorites');
                     setIsFavorite(favsRes.data.some(f => f.id === parseInt(id)));
                 } catch (e) {
-                    // Not logged in or error, ignore
                 }
             } catch (err) {
                 console.error(err);
@@ -62,12 +60,10 @@ const RestaurantDetails = () => {
 
     return (
         <div className="px-4 md:px-20 pb-20 bg-bg text-dark transition-colors duration-300">
-            {/* Breadcrumbs Placeholder */}
             <div className="py-4 text-xs text-muted space-x-2">
                 <span>Home</span> / <span>India</span> / <span>Mumbai</span> / <span className="text-muted/60">{restaurant.name}</span>
             </div>
 
-            {/* Restaurant Info Header */}
             <div className="mb-8">
                 <div className="flex flex-col md:flex-row md:items-start justify-between">
                     <div className="flex-1">
@@ -107,7 +103,6 @@ const RestaurantDetails = () => {
             </div>
 
             <div className="flex flex-col md:flex-row gap-10">
-                {/* Menu Section */}
                 <div className="flex-1">
                     <div className="flex items-center justify-between mb-8">
                         <h2 className="text-2xl font-bold text-dark tracking-tight">Order Online</h2>
@@ -173,10 +168,8 @@ const RestaurantDetails = () => {
                     </div>
                 </div>
 
-                {/* Reviews Section */}
                 <Reviews restaurantId={id} />
 
-                {/* Info Sidebar */}
                 <div className="w-full md:w-80 h-fit sticky top-24 hidden md:block">
                     <div className="card p-6 shadow-xl border-muted/20">
                         <h4 className="font-bold flex items-center space-x-2 text-dark mb-4 uppercase text-xs tracking-widest">

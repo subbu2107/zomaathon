@@ -50,7 +50,6 @@ h6 {
   @apply bg-bg rounded-xl shadow-sm border border-muted/10 overflow-hidden hover:shadow-md transition-all duration-300;
 }
 
-/* Glassmorphism effect */
 .glass {
   @apply bg-bg/80 backdrop-blur-md border border-muted/20;
 }

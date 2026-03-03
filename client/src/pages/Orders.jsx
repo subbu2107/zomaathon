@@ -9,12 +9,7 @@ import { toast } from 'react-toastify';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-
-const socket = io(API_URL, {
-    transports: ["websocket"],
-    withCredentials: true
-});
+const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000');
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -36,14 +31,12 @@ const Orders = () => {
 
         if (user) {
             fetchOrders();
-            // Join a private room for the user to get real-time updates
             socket.emit('join', { room: `user_${user.id}` });
         } else {
             setLoading(false);
             navigate('/login');
         }
 
-        // Listen for real-time status updates
         socket.on('order_status_update', (data) => {
             setOrders(prev => prev.map(o =>
                 o.id === data.order_id ? { ...o, status: data.status } : o
@@ -76,7 +69,6 @@ const Orders = () => {
         try {
             const doc = new jsPDF();
 
-            // Brand Header with Accent
             doc.setFillColor(235, 53, 67); // Red
             doc.rect(0, 0, 210, 10, 'F');
 
@@ -90,17 +82,14 @@ const Orders = () => {
             doc.setTextColor(150, 150, 150);
             doc.text("Your meal is our passion", 14, 32);
 
-            // Receipt Info (Right Aligned)
             doc.setFontSize(10);
             doc.setTextColor(80, 80, 80);
             doc.text(`RECEIPT: #${order.id}`, 196, 25, { align: 'right' });
             doc.text(`DATE: ${new Date(order.created_at).toLocaleString('en-IN', { dateStyle: 'medium' })}`, 196, 32, { align: 'right' });
 
-            // Horizontal Line
             doc.setDrawColor(220, 220, 220);
             doc.line(14, 40, 196, 40);
 
-            // Restaurant & Customer Details
             doc.setFontSize(12);
             doc.setTextColor(40, 40, 40);
             doc.setFont("helvetica", "bold");
@@ -123,7 +112,6 @@ const Orders = () => {
                 doc.setTextColor(40, 40, 40);
             }
 
-            // Summary Table
             const tableColumn = ["Item Description", "Qty", "Price", "Subtotal"];
             const tableRows = [];
 
@@ -154,7 +142,6 @@ const Orders = () => {
                 margin: { left: 14, right: 14 }
             });
 
-            // Calculations Footer
             const finalY = doc.lastAutoTable.finalY + 10;
             doc.setFontSize(11);
             doc.setFont("helvetica", "normal");
@@ -166,7 +153,6 @@ const Orders = () => {
             doc.text("Status:", 14, finalY + 7);
             doc.text(order.status, 50, finalY + 7);
 
-            // Grand Total (Box Design)
             doc.setFillColor(245, 245, 245);
             doc.rect(140, finalY - 5, 56, 20, 'F');
             doc.setFontSize(12);
@@ -177,7 +163,6 @@ const Orders = () => {
             doc.setTextColor(235, 53, 67);
             doc.text(`Rs. ${order.total_amount.toFixed(2)}`, 191, finalY + 10, { align: 'right' });
 
-            // Footer Message
             doc.setFontSize(9);
             doc.setFont("helvetica", "italic");
             doc.setTextColor(150, 150, 150);
@@ -236,7 +221,6 @@ const Orders = () => {
                                 </div>
                             </div>
 
-                            {/* Tracking Progress */}
                             {order.status !== 'Cancelled' && (
                                 <div className="mb-12 px-2">
                                     <div className="relative flex justify-between">
@@ -253,9 +237,7 @@ const Orders = () => {
                                                     }`}>{step}</span>
                                             </div>
                                         ))}
-                                        {/* Progress Bar Background */}
                                         <div className="absolute top-6 left-0 w-full h-1.5 bg-muted/5 -z-10 rounded-full"></div>
-                                        {/* Dynamic Progress Fill */}
                                         <div
                                             className="absolute top-6 left-0 h-1.5 bg-gradient-to-r from-brand to-brand/60 transition-all duration-1000 ease-in-out -z-10 rounded-full shadow-[0_0_10px_rgba(235,53,67,0.3)]"
                                             style={{ width: `${(getStatusStep(order.status) / 3) * 100}%` }}
@@ -264,18 +246,13 @@ const Orders = () => {
                                 </div>
                             )}
 
-                            {/* Live Tracking for 'Out for Delivery' */}
                             {order.status === 'Out for Delivery' && (
-                                <div className="mb-12 bg-blue-500/5 p-8 rounded-3xl border border-blue-500/10 flex flex-col items-center justify-center text-center animate-pulse">
-                                    <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white mb-6 shadow-xl shadow-blue-500/20">
-                                        <Navigation size={32} />
-                                    </div>
-                                    <p className="text-xl font-black text-blue-600 uppercase tracking-tighter">On Its Way!</p>
-                                    <p className="text-sm font-medium text-blue-500/60 max-w-sm mt-2 font-black italic">Our delivery partner is currently en route to your location. Keep an eye out!</p>
+                                <div className="mb-12">
+                                    <h3 className="text-xs font-black uppercase text-brand tracking-widest mb-4 ml-2">Live Delivery Track</h3>
+                                    <DeliveryTracker orderId={order.id} />
                                 </div>
                             )}
 
-                            {/* Order Items List */}
                             <div className="space-y-4 bg-muted/5 p-8 rounded-3xl border border-muted/10 shadow-inner">
                                 {order.items?.map((item, idx) => (
                                     <div key={idx} className="flex justify-between items-center text-sm group/item">

@@ -5,6 +5,7 @@ import { useAuth } from '../store/AuthContext';
 import API from '../services/api';
 import { Trash2, Plus, Minus, CreditCard, Home, MapPin, ChevronRight, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
+import RecommendationSystem from '../components/RecommendationSystem';
 
 const Cart = () => {
     const { cartItems, updateQuantity, removeFromCart, subtotal, restaurantId, clearCart, addToCart } = useCart();
@@ -30,7 +31,6 @@ const Cart = () => {
         const cartCategories = new Set(cartItems.map(item => item.category?.toLowerCase()));
         const cartItemIds = new Set(cartItems.map(item => item.id));
 
-        // Define trigger categories that are considered "Main"
         const mainCategories = ['main course', 'biryani', 'pizza', 'burger', 'rolls'];
         const hasMain = [...cartCategories].some(cat => mainCategories.includes(cat));
 
@@ -51,14 +51,12 @@ const Cart = () => {
             );
         }
 
-        // If no specifically targeted recommendations, fallback to anything not in cart that isn't a main
         if (recs.length === 0) {
             recs = restaurantMenu.filter(item =>
                 !cartItemIds.has(item.id) &&
                 !mainCategories.includes(item.category?.toLowerCase())
             );
         }
-        // Last resort fallback
         if (recs.length === 0) {
             recs = restaurantMenu.filter(item => !cartItemIds.has(item.id));
         }
@@ -148,13 +146,19 @@ const Cart = () => {
     const totalDiscount = (subtotal * discount) / 100;
     const finalAmount = subtotal + 40 + 25.5 - totalDiscount;
 
+    const [globalRecommendations, setGlobalRecommendations] = useState([]);
+    useEffect(() => {
+        API.get('/restaurants/recommendations')
+            .then(res => setGlobalRecommendations(res.data))
+            .catch(err => console.error(err));
+    }, []);
+
     return (
         <div className="px-4 md:px-20 py-10 bg-bg min-h-screen text-dark transition-colors duration-300">
             <h1 className="text-3xl font-black mb-10 text-dark tracking-tight">Secure Checkout</h1>
 
             <div className="flex flex-col lg:flex-row gap-10">
                 <div className="flex-1 space-y-6">
-                    {/* Items Section */}
                     <div className="card p-6 bg-bg shadow-lg border-muted/10">
                         <h2 className="text-xl font-bold mb-6 flex items-center space-x-2 text-dark">
                             <span>Order Summary</span>
@@ -216,7 +220,6 @@ const Cart = () => {
                         )}
                     </div>
 
-                    {/* Address Section */}
                     <div className="card p-6 bg-bg shadow-lg border-muted/10">
                         <h2 className="text-xl font-bold mb-6 flex items-center justify-between text-dark">
                             <span>Delivery Address</span>
@@ -259,7 +262,6 @@ const Cart = () => {
                     </div>
                 </div>
 
-                {/* Sidebar / Bill */}
                 <div className="w-full lg:w-96 space-y-6">
                     <div className="card p-6 bg-bg shadow-2xl border-muted/10 sticky top-24 transition-all duration-300">
                         <h2 className="text-xl font-black mb-8 text-dark tracking-tight">Bill Summary</h2>
@@ -348,6 +350,10 @@ const Cart = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div className="mt-20">
+                <RecommendationSystem recommendations={globalRecommendations} title="Your Next Food Discovery" />
             </div>
         </div>
     );

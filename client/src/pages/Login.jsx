@@ -22,7 +22,6 @@ const Login = () => {
         try {
             const userData = await login(formData.email, formData.password);
 
-            // Safety check for partner login
             if (loginType === 'partner' && userData.role !== 'owner') {
                 toast.error("This account is not a partner account.");
                 return;
@@ -30,7 +29,6 @@ const Login = () => {
 
             toast.success("Welcome back to Zomathon!");
 
-            // Redirect based on role
             if (userData.role === 'owner') {
                 navigate('/dashboard');
             } else {
@@ -58,7 +56,6 @@ const Login = () => {
                     </p>
                 </div>
 
-                {/* Login Type Selection */}
                 <div className="flex p-1.5 bg-gray-100/80 rounded-2xl mb-10 shadow-inner relative overflow-hidden backdrop-blur-sm">
                     <div
                         className={`absolute top-1.5 bottom-1.5 w-[calc(50%-0.375rem)] bg-white rounded-xl shadow-lg transition-all duration-500 ease-out z-0 ${loginType === 'partner' ? 'translate-x-[calc(100%+0.75rem)]' : 'translate-x-0'}`}

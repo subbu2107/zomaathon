@@ -6,12 +6,7 @@ import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-
-const socket = io(API_URL, {
-    transports: ["websocket"],
-    withCredentials: true
-});
+const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000');
 
 const Dashboard = () => {
     const { user } = useAuth();
@@ -32,8 +27,8 @@ const Dashboard = () => {
 
     const fetchDashboardData = async () => {
         try {
-            const resData = await API.get('/restaurants/');
-            const myRes = resData.data.find(r => r.owner_id === user.id);
+            const resData = await API.get('/restaurants/my');
+            const myRes = resData.data[0]; // Assuming one restaurant per owner for now
             if (myRes) {
                 setRestaurant(myRes);
                 const ordersRes = await API.get(`/orders/restaurant/${myRes.id}`);
@@ -114,8 +109,8 @@ const Dashboard = () => {
 
     if (user?.role !== 'owner' && user?.role !== 'admin') {
         return (
-            <div className="py-20 text-center px-10 bg-gray-50 min-h-screen flex items-center justify-center">
-                <div className="bg-white p-12 rounded-[3rem] shadow-2xl max-w-lg border border-red-50 ring-1 ring-red-100">
+            <div className="py-20 text-center px-10 bg-bg min-h-screen flex items-center justify-center transition-colors duration-300">
+                <div className="bg-bg p-12 rounded-[3rem] shadow-2xl max-w-lg border border-red-50 ring-1 ring-red-100">
                     <h2 className="text-3xl font-black text-red-500 uppercase tracking-tighter mb-4">Access Denied</h2>
                     <p className="text-gray-500 font-medium">This portal is reserved for Restaurant Partners and Administrators only.</p>
                 </div>
@@ -125,7 +120,7 @@ const Dashboard = () => {
 
     if (loading) {
         return (
-            <div className="h-screen flex items-center justify-center bg-gray-50">
+            <div className="h-screen flex items-center justify-center bg-bg transition-colors duration-300">
                 <div className="text-center">
                     <div className="w-16 h-16 border-4 border-brand border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                     <p className="text-brand font-black tracking-widest uppercase animate-pulse">Loading Platform</p>
@@ -135,22 +130,22 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="px-4 md:px-20 py-10 bg-gray-50 min-h-screen">
+        <div className="px-4 md:px-20 py-10 bg-bg min-h-screen transition-colors duration-300">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
                 <div>
-                    <h1 className="text-4xl font-black text-gray-800 tracking-tight">Owner Dashboard</h1>
-                    <p className="text-gray-400 font-bold uppercase text-[10px] tracking-[0.2em]">{restaurant?.name || "No Restaurant Linked"}</p>
+                    <h1 className="text-4xl font-black text-dark tracking-tight">Owner Dashboard</h1>
+                    <p className="text-muted font-bold uppercase text-[10px] tracking-[0.2em]">{restaurant?.name || "No Restaurant Linked"}</p>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-3 bg-white p-2 px-4 rounded-xl shadow-sm border border-gray-100">
+                    <div className="flex items-center space-x-3 bg-bg p-2 px-4 rounded-xl shadow-sm border border-muted/10">
                         <div className={`w-2.5 h-2.5 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
-                        <span className="text-xs font-black text-gray-500 uppercase tracking-widest">
+                        <span className="text-xs font-black text-muted uppercase tracking-widest">
                             {isConnected ? 'Live Sync' : 'Disconnected'}
                         </span>
                     </div>
                     <button
                         onClick={fetchDashboardData}
-                        className="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 hover:bg-gray-50 transition-all active:scale-95 text-gray-400 hover:text-brand"
+                        className="bg-bg p-3 rounded-2xl shadow-sm border border-muted/10 hover:bg-muted/5 transition-all active:scale-95 text-muted hover:text-brand"
                     >
                         <Loader2 size={20} className={loading ? 'animate-spin' : ''} />
                     </button>
@@ -158,40 +153,40 @@ const Dashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <div className="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-gray-200/50 flex items-center space-x-6 border border-gray-50">
-                    <div className="bg-red-50 p-5 rounded-3xl text-brand"><DollarSign size={28} /></div>
+                <div className="bg-bg p-8 rounded-[2.5rem] shadow-xl shadow-black/5 flex items-center space-x-6 border border-muted/10">
+                    <div className="bg-brand/10 p-5 rounded-3xl text-brand"><DollarSign size={28} /></div>
                     <div>
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Total Earnings</p>
-                        <p className="text-3xl font-black text-gray-800">₹{orders.filter(o => o.status === 'Delivered').reduce((acc, o) => acc + o.total_amount, 0).toFixed(0)}</p>
+                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-1">Total Earnings</p>
+                        <p className="text-3xl font-black text-dark">₹{orders.filter(o => o.status === 'Delivered').reduce((acc, o) => acc + o.total_amount, 0).toFixed(0)}</p>
                     </div>
                 </div>
-                <div className="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-gray-200/50 flex items-center space-x-6 border border-gray-50">
-                    <div className="bg-blue-50 p-5 rounded-3xl text-blue-500"><Package size={28} /></div>
+                <div className="bg-bg p-8 rounded-[2.5rem] shadow-xl shadow-black/5 flex items-center space-x-6 border border-muted/10">
+                    <div className="bg-blue-500/10 p-5 rounded-3xl text-blue-500"><Package size={28} /></div>
                     <div>
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Total Orders</p>
-                        <p className="text-3xl font-black text-gray-800">{orders.length}</p>
+                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-1">Total Orders</p>
+                        <p className="text-3xl font-black text-dark">{orders.length}</p>
                     </div>
                 </div>
-                <div className="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-gray-200/50 flex items-center space-x-6 border border-gray-50">
-                    <div className="bg-green-50 p-5 rounded-3xl text-green-500"><Utensils size={28} /></div>
+                <div className="bg-bg p-8 rounded-[2.5rem] shadow-xl shadow-black/5 flex items-center space-x-6 border border-muted/10">
+                    <div className="bg-green-500/10 p-5 rounded-3xl text-green-500"><Utensils size={28} /></div>
                     <div>
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Menu Items</p>
-                        <p className="text-3xl font-black text-gray-800">{restaurant?.menu?.length || 0}</p>
+                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-1">Menu Items</p>
+                        <p className="text-3xl font-black text-dark">{restaurant?.menu?.length || 0}</p>
                     </div>
                 </div>
             </div>
 
-            <div className="flex items-center space-x-10 mb-10 border-b border-gray-200/60">
+            <div className="flex items-center space-x-10 mb-10 border-b border-muted/10">
                 <button
                     onClick={() => setActiveTab('orders')}
-                    className={`pb-5 text-xs font-black uppercase tracking-[0.2em] transition-all relative ${activeTab === 'orders' ? 'text-brand' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`pb-5 text-xs font-black uppercase tracking-[0.2em] transition-all relative ${activeTab === 'orders' ? 'text-brand' : 'text-muted hover:text-dark'}`}
                 >
                     Incoming Orders
                     {activeTab === 'orders' && <div className="absolute bottom-0 left-0 w-full h-1 bg-brand rounded-full"></div>}
                 </button>
                 <button
                     onClick={() => setActiveTab('menu')}
-                    className={`pb-5 text-xs font-black uppercase tracking-[0.2em] transition-all relative ${activeTab === 'menu' ? 'text-brand' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`pb-5 text-xs font-black uppercase tracking-[0.2em] transition-all relative ${activeTab === 'menu' ? 'text-brand' : 'text-muted hover:text-dark'}`}
                 >
                     Menu Management
                     {activeTab === 'menu' && <div className="absolute bottom-0 left-0 w-full h-1 bg-brand rounded-full"></div>}
@@ -201,12 +196,12 @@ const Dashboard = () => {
             {activeTab === 'orders' && (
                 <div className="space-y-6">
                     {!restaurant ? (
-                        <div className="bg-white p-24 text-center rounded-[3.5rem] border-2 border-dashed border-gray-100 shadow-sm max-w-2xl mx-auto flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-5 duration-700">
-                            <div className="bg-red-50 p-10 rounded-[2.5rem] text-brand mb-10 ring-8 ring-red-50/50">
+                        <div className="bg-bg p-24 text-center rounded-[3.5rem] border-2 border-dashed border-muted/20 shadow-sm max-w-2xl mx-auto flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-5 duration-700">
+                            <div className="bg-brand/10 p-10 rounded-[2.5rem] text-brand mb-10 ring-8 ring-brand/5">
                                 <Store size={64} />
                             </div>
-                            <h2 className="text-4xl font-black text-gray-800 tracking-tight mb-4">Grow your business</h2>
-                            <p className="text-gray-400 mb-12 max-w-sm font-bold text-sm leading-relaxed uppercase tracking-wider">Register your restaurant to start accepting delicious orders today!</p>
+                            <h2 className="text-4xl font-black text-dark tracking-tight mb-4">Grow your business</h2>
+                            <p className="text-muted mb-12 max-w-sm font-bold text-sm leading-relaxed uppercase tracking-wider">Register your restaurant to start accepting delicious orders today!</p>
                             <button
                                 onClick={() => navigate('/dashboard/create-restaurant')}
                                 className="bg-brand text-white px-12 py-6 rounded-[2rem] font-black uppercase tracking-[0.2em] hover:bg-red-700 transition-all shadow-2xl shadow-brand/20 hover:shadow-brand/40 active:scale-95 flex items-center space-x-4"
@@ -216,28 +211,28 @@ const Dashboard = () => {
                             </button>
                         </div>
                     ) : orders.length === 0 ? (
-                        <div className="bg-white p-32 text-center rounded-[3rem] border-2 border-dashed border-gray-100">
-                            <Package className="mx-auto text-gray-200 mb-6 animate-bounce" size={64} />
-                            <p className="text-gray-400 font-black uppercase tracking-widest text-xs">Waiting for your first order...</p>
+                        <div className="bg-bg p-32 text-center rounded-[3rem] border-2 border-dashed border-muted/20">
+                            <Package className="mx-auto text-muted/20 mb-6 animate-bounce" size={64} />
+                            <p className="text-muted font-black uppercase tracking-widest text-xs">Waiting for your first order...</p>
                         </div>
                     ) : (
                         orders.map((order) => (
-                            <div key={order.id} className="bg-white p-8 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all border border-gray-50 group">
+                            <div key={order.id} className="bg-bg p-8 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all border border-muted/10 group">
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                                     <div className="flex items-center space-x-6">
-                                        <div className="bg-gray-50 p-4 rounded-2xl group-hover:bg-brand/5 transition-colors">
-                                            <Package className="text-gray-400 group-hover:text-brand transition-colors" size={24} />
+                                        <div className="bg-muted/5 p-4 rounded-2xl group-hover:bg-brand/5 transition-colors">
+                                            <Package className="text-muted group-hover:text-brand transition-colors" size={24} />
                                         </div>
                                         <div>
                                             <div className="flex items-center space-x-3 mb-1">
-                                                <span className="font-mono font-black text-gray-300">#{order.id}</span>
+                                                <span className="font-mono font-black text-muted/30">#{order.id}</span>
                                                 <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${order.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' :
                                                     order.status === 'Delivered' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
                                                     }`}>
                                                     {order.status}
                                                 </span>
                                             </div>
-                                            <p className="font-black text-xl text-gray-800 tracking-tight">₹{order.total_amount}</p>
+                                            <p className="font-black text-xl text-dark tracking-tight">₹{order.total_amount}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center space-x-3 w-full md:w-auto">
@@ -250,7 +245,7 @@ const Dashboard = () => {
                                         {order.status === 'Out for Delivery' && (
                                             <button onClick={() => handleUpdateStatus(order.id, 'Delivered')} className="flex-1 md:flex-none bg-green-500 text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-green-600 transition-all shadow-lg shadow-green-100 active:scale-95">Delivered</button>
                                         )}
-                                        <button className="bg-gray-50 p-3 rounded-2xl text-gray-300 hover:text-red-500 transition-colors"><Trash2 size={20} /></button>
+                                        <button className="bg-muted/5 p-3 rounded-2xl text-muted/40 hover:text-red-500 transition-colors"><Trash2 size={20} /></button>
                                     </div>
                                 </div>
                             </div>
@@ -261,10 +256,10 @@ const Dashboard = () => {
 
             {activeTab === 'menu' && restaurant && (
                 <div className="space-y-8">
-                    <div className="flex justify-between items-center bg-white p-6 rounded-3xl shadow-sm border border-gray-50">
+                    <div className="flex justify-between items-center bg-bg p-6 rounded-3xl shadow-sm border border-muted/10">
                         <div>
-                            <h3 className="text-xl font-black text-gray-800 tracking-tight">Active Menu</h3>
-                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Manage your offerings</p>
+                            <h3 className="text-xl font-black text-dark tracking-tight">Active Menu</h3>
+                            <p className="text-xs font-bold text-muted uppercase tracking-widest">Manage your offerings</p>
                         </div>
                         <button
                             onClick={() => setIsMenuModalOpen(true)}
@@ -277,7 +272,7 @@ const Dashboard = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {restaurant.menu?.map((item) => (
-                            <div key={item.id} className="bg-white p-6 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all border border-gray-50 group relative">
+                            <div key={item.id} className="bg-bg p-6 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all border border-muted/10 group relative">
                                 <div className="flex items-center space-x-5">
                                     <div className="relative">
                                         <div className={`w-3.5 h-3.5 border-2 rounded-sm flex items-center justify-center p-0.5 ${item.is_veg ? 'border-green-600' : 'border-red-600'}`}>
@@ -285,16 +280,16 @@ const Dashboard = () => {
                                         </div>
                                     </div>
                                     <div className="flex-1">
-                                        <h4 className="font-black text-gray-800 tracking-tight truncate pr-10">{item.name}</h4>
+                                        <h4 className="font-black text-dark tracking-tight truncate pr-10">{item.name}</h4>
                                         <p className="text-brand font-black text-sm mb-1">₹{item.price}</p>
-                                        <span className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em]">{item.category}</span>
+                                        <span className="text-[9px] font-black text-muted uppercase tracking-[0.2em]">{item.category}</span>
                                     </div>
                                 </div>
                                 <div className="absolute top-6 right-6 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
-                                    <button className="p-2.5 bg-gray-50 rounded-xl text-gray-300 hover:text-brand hover:bg-brand/5 transition-all"><Edit size={16} /></button>
+                                    <button className="p-2.5 bg-muted/10 rounded-xl text-muted/50 hover:text-brand hover:bg-brand/5 transition-all"><Edit size={16} /></button>
                                     <button
                                         onClick={() => handleDeleteItem(item.id)}
-                                        className="p-2.5 bg-gray-50 rounded-xl text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all"
+                                        className="p-2.5 bg-muted/10 rounded-xl text-muted/50 hover:text-red-500 hover:bg-red-50/10 transition-all"
                                     >
                                         <Trash2 size={16} />
                                     </button>
@@ -306,33 +301,33 @@ const Dashboard = () => {
             )}
 
             {activeTab === 'menu' && !restaurant && (
-                <div className="bg-white p-24 text-center rounded-[3.5rem] border-2 border-dashed border-gray-100 shadow-sm max-w-2xl mx-auto flex flex-col items-center justify-center">
-                    <div className="bg-gray-50 p-10 rounded-[2.5rem] text-gray-200 mb-10">
+                <div className="bg-bg p-24 text-center rounded-[3.5rem] border-2 border-dashed border-muted/20 shadow-sm max-w-2xl mx-auto flex flex-col items-center justify-center">
+                    <div className="bg-muted/5 p-10 rounded-[2.5rem] text-muted/20 mb-10">
                         <Utensils size={64} />
                     </div>
-                    <h2 className="text-3xl font-black text-gray-800 tracking-tight mb-2">Build your menu</h2>
-                    <p className="text-gray-400 max-w-sm font-bold text-xs uppercase tracking-widest leading-relaxed">Please register your restaurant first to unlock menu management.</p>
+                    <h2 className="text-3xl font-black text-dark tracking-tight mb-2">Build your menu</h2>
+                    <p className="text-muted max-w-sm font-bold text-xs uppercase tracking-widest leading-relaxed">Please register your restaurant first to unlock menu management.</p>
                 </div>
             )}
 
             {isMenuModalOpen && (
                 <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
-                    <div className="bg-white rounded-[3rem] w-full max-w-xl p-12 shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-300">
+                    <div className="bg-bg rounded-[3rem] w-full max-w-xl p-12 shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-300 border border-muted/20">
                         <div className="absolute top-0 right-0 p-8">
-                            <button onClick={() => setIsMenuModalOpen(false)} className="bg-gray-50 p-3 rounded-2xl text-gray-400 hover:text-gray-600 transition-colors"><X /></button>
+                            <button onClick={() => setIsMenuModalOpen(false)} className="bg-muted/10 p-3 rounded-2xl text-muted hover:text-dark transition-colors"><X /></button>
                         </div>
 
                         <div className="mb-10 text-center">
-                            <h3 className="text-3xl font-black text-gray-800 tracking-tight">Create Item</h3>
-                            <p className="text-gray-400 font-black uppercase text-[10px] tracking-[0.2em] mt-1">Add to your restaurant menu</p>
+                            <h3 className="text-3xl font-black text-dark tracking-tight">Create Item</h3>
+                            <p className="text-muted font-black uppercase text-[10px] tracking-[0.2em] mt-1">Add to your restaurant menu</p>
                         </div>
 
                         <form onSubmit={handleCreateMenuItem} className="space-y-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Item Name</label>
+                                <label className="text-xs font-black text-muted uppercase tracking-widest ml-1">Item Name</label>
                                 <input
                                     placeholder="e.g. Signature Burger"
-                                    className="w-full bg-gray-50 border-2 border-gray-50 rounded-2xl py-4 px-6 outline-none focus:border-brand/30 focus:bg-white transition-all text-gray-800 font-bold"
+                                    className="w-full bg-bg border-2 border-muted/10 rounded-2xl py-4 px-6 outline-none focus:border-brand/30 transition-all text-dark font-bold"
                                     required
                                     value={newItem.name}
                                     onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
@@ -341,44 +336,56 @@ const Dashboard = () => {
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Price (₹)</label>
+                                    <label className="text-xs font-black text-muted uppercase tracking-widest ml-1">Price (₹)</label>
                                     <input
                                         type="number"
                                         placeholder="0.00"
-                                        className="w-full bg-gray-50 border-2 border-gray-50 rounded-2xl py-4 px-6 outline-none focus:border-brand/30 focus:bg-white transition-all text-gray-800 font-bold"
+                                        className="w-full bg-bg border-2 border-muted/10 rounded-2xl py-4 px-6 outline-none focus:border-brand/30 transition-all text-dark font-bold"
                                         required
                                         value={newItem.price}
                                         onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Category</label>
-                                    <input
-                                        placeholder="e.g. Main Course"
-                                        className="w-full bg-gray-50 border-2 border-gray-50 rounded-2xl py-4 px-6 outline-none focus:border-brand/30 focus:bg-white transition-all text-gray-800 font-bold"
+                                    <label className="text-xs font-black text-muted uppercase tracking-widest ml-1">Category</label>
+                                    <select
+                                        className="w-full bg-bg border-2 border-muted/10 rounded-2xl py-4 px-6 outline-none focus:border-brand/30 transition-all text-dark font-bold appearance-none cursor-pointer"
                                         required
                                         value={newItem.category}
                                         onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
-                                    />
+                                    >
+                                        <option value="" disabled className="bg-bg text-dark">Select Category</option>
+                                        <option value="Pizza" className="bg-bg text-dark">Pizza</option>
+                                        <option value="Burger" className="bg-bg text-dark">Burger</option>
+                                        <option value="Thali" className="bg-bg text-dark">Thali</option>
+                                        <option value="Biryani" className="bg-bg text-dark">Biryani</option>
+                                        <option value="Rolls" className="bg-bg text-dark">Rolls</option>
+                                        <option value="Cake" className="bg-bg text-dark">Cake</option>
+                                        <option value="Beverages" className="bg-bg text-dark">Beverages</option>
+                                        <option value="Desserts" className="bg-bg text-dark">Desserts</option>
+                                        <option value="North Indian" className="bg-bg text-dark">North Indian</option>
+                                        <option value="South Indian" className="bg-bg text-dark">South Indian</option>
+                                        <option value="Chinese" className="bg-bg text-dark">Chinese</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Description</label>
+                                <label className="text-xs font-black text-muted uppercase tracking-widest ml-1">Description</label>
                                 <textarea
                                     placeholder="Briefly describe the ingredients or taste..."
-                                    className="w-full bg-gray-50 border-2 border-gray-50 rounded-2xl py-4 px-6 outline-none focus:border-brand/30 focus:bg-white transition-all text-gray-800 font-bold h-24 resize-none"
+                                    className="w-full bg-bg border-2 border-muted/10 rounded-2xl py-4 px-6 outline-none focus:border-brand/30 transition-all text-dark font-bold h-24 resize-none"
                                     value={newItem.description}
                                     onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
                                 />
                             </div>
 
-                            <div className="flex items-center justify-between bg-gray-50 p-6 rounded-3xl">
+                            <div className="flex items-center justify-between bg-muted/5 p-6 rounded-3xl">
                                 <div className="flex items-center space-x-4">
                                     <div className={`w-8 h-8 flex items-center justify-center border-2 rounded-lg ${newItem.is_veg ? 'border-green-600 bg-green-50 text-green-600' : 'border-red-600 bg-red-50 text-red-600'}`}>
                                         <div className={`w-3 h-3 rounded-full ${newItem.is_veg ? 'bg-green-600' : 'bg-red-600'}`}></div>
                                     </div>
-                                    <span className="font-black text-sm text-gray-700 uppercase tracking-widest">Pure Vegetarian</span>
+                                    <span className="font-black text-sm text-dark uppercase tracking-widest">Pure Vegetarian</span>
                                 </div>
                                 <label className="relative inline-flex items-center cursor-pointer">
                                     <input
